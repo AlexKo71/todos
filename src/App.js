@@ -1,11 +1,10 @@
 import { useState } from "react";
-
-import TodoList from "./TodoList";
+import { Outlet, NavLink } from "react-router-dom";
 import initialTodos from "./todos.js";
-import TodoAdd from "./TodoAdd.js";
 
 export default function App() {
   const [todos, setTodos] = useState(initialTodos);
+  const [showMenu, setShowMenu] = useState(false);
 
   const setDone = (key) => {
     const newTodos = [...todos];
@@ -23,16 +22,52 @@ export default function App() {
     setTodos([...todos, deed]);
   };
 
+  const handleBurgerClick = (evt) => {
+    evt.preventDefault();
+    setShowMenu(!showMenu);
+  };
+
   return (
     <div className="container">
       <nav className="navbar is-light">
         <div className="navbar-brand">
-          <span className="navbar-item is-uppercase">Todos</span>
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              "navbar-item is-uppercase" + (isActive ? "is-active" : "")
+            }
+          >
+            Todos
+          </NavLink>
+          <a
+            href="/"
+            className={showMenu ? "navbar-burger is-active" : "navbar-burger"}
+            onClick={handleBurgerClick}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </a>
+        </div>
+        <div
+          className={showMenu ? "navbar-menu is-active" : "navbar-menu"}
+          onClick={handleBurgerClick}
+        >
+          <div className="navbar-start">
+            <NavLink
+              to="/add"
+              className={({ isActive }) =>
+                "navbar-item" + (isActive ? "is-active" : "")
+              }
+            >
+              Создать дело
+            </NavLink>
+          </div>
         </div>
       </nav>
       <main className="content px-6 py-6">
-        <TodoList list={todos} setDone={setDone} del={del} />
-        <TodoAdd add={add} />
+        <Outlet />
       </main>
     </div>
   );
