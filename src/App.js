@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import TodoList from "./TodoList.js";
 import initialTodos from "./todos.js";
+import TodoAdd from "./TodoAdd.js";
 
 export default function App() {
   const [todos, setTodos] = useState(initialTodos);
@@ -11,6 +12,10 @@ export default function App() {
     const deed = newTodos.find((current) => current.key === key);
     if (deed) deed.done = true;
     setTodos(newTodos);
+  };
+
+  const add = (deed) => {
+    setTodos([...todos, deed]);
   };
 
   const del = (key) => {
@@ -27,6 +32,7 @@ export default function App() {
       </nav>
       <main className="content px-6 py-6">
         <TodoList list={todos} setDone={setDone} del={del} />
+        <TodoAdd add={add} />
       </main>
     </div>
   );
