@@ -20,3 +20,17 @@ export async function addTodo({ request }) {
   todos.push(newTodo);
   return redirect("/");
 }
+
+export function getTodo({ params }) {
+  const key = +params.key;
+  const todo = todos.find((current) => current.key === key);
+  return todo;
+}
+
+export function actTodo({ params, request }) {
+  const key = +params.key;
+  const todo = todos.findIndex((current) => current.key === key);
+  if (request.method === "PATCH") todos[todo].done = true;
+  else todos.splice(todo, 1);
+  return redirect("/");
+}
